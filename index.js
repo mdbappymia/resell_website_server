@@ -1,15 +1,20 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { connection } from "./config/dbConnect.js";
 import dotenv from "dotenv";
 import product from "./routes/product.js";
+import user from "./routes/user.js";
+import { errorHandler, notFound } from "./functions/errorHandle.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
 connection.connect((e) => {
   if (e) {
     throw e;
@@ -18,7 +23,8 @@ connection.connect((e) => {
   }
 });
 
-app.use("/product", product);
+app.use("/products", product);
+app.use("/user", user);
 
 app.get("/", (req, res) => {
   res.send("Server is connected");
@@ -49,6 +55,8 @@ app.get("/createProductTable", (req, res) => {
 });
 
 // add new product
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log("Server is connected");

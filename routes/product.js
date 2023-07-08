@@ -34,4 +34,17 @@ product.post("/add", (req, res) => {
   }
 });
 
+// get single product
+product.get("/:id", (req, res) => {
+  try {
+    const sql = `select * from products where id=${req.params?.id}`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result[0]);
+    });
+  } catch (error) {
+    res.send(error.message);
+  }
+});
+
 export default product;
