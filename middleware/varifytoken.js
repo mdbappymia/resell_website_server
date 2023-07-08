@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 export const varifyToken = (req, res, next) => {
   const token = req.cookies.jwt;
-
+  // console.log(token);
   if (token) {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY);
     const sql = `SELECT * from users WHERE users.email='${decoded.email}'`;

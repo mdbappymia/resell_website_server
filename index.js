@@ -10,14 +10,22 @@ import { errorHandler, notFound } from "./functions/errorHandle.js";
 dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  credentials: true, // enable credentials (cookies, authorization headers, etc.)
+};
+app.use(cors(corsOptions));
 app.use(cookieParser());
+
 connection.connect((e) => {
   if (e) {
-    throw e;
+    // throw e;
+    console.log(e);
+    return;
   } else {
     console.log("Database Connected");
   }

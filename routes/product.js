@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { v4 as uuidv4 } from "uuid";
 import { connection } from "../config/dbConnect.js";
 import { formatDate } from "../functions/formatDate.js";
 
@@ -13,7 +14,7 @@ product.get("/", (req, res) => {
       res.json(result);
     });
   } catch (error) {
-    res.send(error.message);
+    res.status(404).send(error.message);
   }
 });
 
@@ -22,6 +23,7 @@ product.post("/add", (req, res) => {
     const product = req.body;
     product.create_time = formatDate(Date.now());
     product.update_time = formatDate(Date.now());
+    product._id = uuidv4();
     // console.log(product);
     const sql = "INSERT INTO products SET?";
     connection.query(sql, product, (err, result) => {
@@ -29,7 +31,7 @@ product.post("/add", (req, res) => {
       res.json(result);
     });
   } catch (error) {
-    res.send(error.message);
+    res.status(401).send(error.message);
     console.log(error.message);
   }
 });
@@ -37,13 +39,13 @@ product.post("/add", (req, res) => {
 // get single product
 product.get("/:id", (req, res) => {
   try {
-    const sql = `select * from products where id=${req.params?.id}`;
+    const sql = `select * from products where _id=${req.params?.id}`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       res.json(result[0]);
     });
   } catch (error) {
-    res.send(error.message);
+    res.status(501).send(error.message);
   }
 });
 
