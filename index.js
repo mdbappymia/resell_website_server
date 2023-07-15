@@ -57,7 +57,7 @@ app.get("/createProductTable", (req, res) => {
     `;
   connection.query(sql, (err, result) => {
     if (err) throw err;
-    console.log(result);
+    // console.log(result);
     res.send("table created");
   });
 });

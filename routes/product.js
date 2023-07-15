@@ -28,7 +28,7 @@ product.post("/add", (req, res) => {
     const sql = "INSERT INTO products SET?";
     connection.query(sql, product, (err, result) => {
       if (err) throw err;
-      res.json(result);
+      res.json({ ...result, _id: product._id });
     });
   } catch (error) {
     res.status(401).send(error.message);
@@ -39,10 +39,22 @@ product.post("/add", (req, res) => {
 // get single product
 product.get("/:id", (req, res) => {
   try {
-    const sql = `select * from products where _id=${req.params?.id}`;
+    const sql = `select * from products where _id='${req.params?.id}'`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
       res.json(result[0]);
+    });
+  } catch (error) {
+    res.status(501).send(error.message);
+  }
+});
+
+product.delete("/:id", (req, res) => {
+  try {
+    const sql = `delete from products where _id='${req.params?.id}'`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.json(result);
     });
   } catch (error) {
     res.status(501).send(error.message);
