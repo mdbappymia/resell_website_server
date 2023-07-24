@@ -26,6 +26,7 @@ SELECT * FROM users WHERE name = 'John';
 user.post("/add", async (req, res) => {
   try {
     const data = req.body;
+    // console.log(data)
     const hash = passwordEncrypt(data.password);
     const user = {
       name: data.name,
